@@ -31,6 +31,11 @@ class AlbumServiceTest {
 
         //방금 저장한 앨범 ID로 데이터가 조회되는지 확인
         Album resAlbum = albumService.getAlbum(savedAlbum.getAlbumId());
+        // getAlbumName의 값이 "테스트" 가 맞는지 확인
         assertEquals("테스트", resAlbum.getAlbumName());
+
+        // 네임명으로 데이터가 조회되는지 확인
+        Album resAlbum2 = albumService.getAlbum(savedAlbum.getAlbumName());
+        assertEquals("테스트", resAlbum2.getAlbumName());
     }
 }
