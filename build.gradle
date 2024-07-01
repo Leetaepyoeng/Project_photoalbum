@@ -1,15 +1,16 @@
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.7'
-	id 'io.spring.dependency-management' version '1.1.5'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
 group = 'com.squarecross'
 version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
 
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
 	}
 }
 
@@ -18,15 +19,16 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 	//JPA 관련
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	runtimeOnly 'com.mysql:mysql-connector-j'
-	implementation 'org.hibernate:hibernate-search-orm:5.11.1.Final'
+	implementation 'org.hibernate:hibernate-search:5.11.1.Final'
 }
 
 tasks.named('test') {

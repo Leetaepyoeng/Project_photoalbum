@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @Service
 public class AlbumService {
+
     @Autowired
     private AlbumRepository albumRepository;
 
