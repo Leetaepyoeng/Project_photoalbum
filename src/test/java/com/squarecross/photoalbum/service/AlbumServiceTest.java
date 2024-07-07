@@ -3,6 +3,7 @@ package com.squarecross.photoalbum.service;
 import com.squarecross.photoalbum.domain.Album;
 import com.squarecross.photoalbum.domain.Photo;
 import com.squarecross.photoalbum.dto.AlbumDto;
+import com.squarecross.photoalbum.mapper.AlbumMapper;
 import com.squarecross.photoalbum.repository.PhotoRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.squarecross.photoalbum.repository.AlbumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -69,6 +71,21 @@ class AlbumServiceTest {
         Album reloadedAlbum = albumRepository.findById(savedAlbum.getAlbumId()).orElseThrow(() -> new RuntimeException("Album not found"));
         System.out.println("=========================================================");
         System.out.println("사진의 개수: "+resAlbum.getCount());
+        System.out.println("=========================================================");
+    }
+
+    @Test
+    void testAlbumCreate() throws IOException {
+        AlbumDto albumDto = new AlbumDto();
+        albumDto.setAlbumName("앨범생성테스트");
+        AlbumDto savedAlbumDto = albumService.createAlbum(albumDto);
+        System.out.println("=========================================================");
+        System.out.println("앨범 생성");
+        System.out.println("=========================================================");
+
+        albumService.deleteAlbumById(savedAlbumDto.getAlbumId());
+        System.out.println("=========================================================");
+        System.out.println("앨범 삭제");
         System.out.println("=========================================================");
     }
 }

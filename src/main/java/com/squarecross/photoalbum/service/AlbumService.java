@@ -1,5 +1,6 @@
 package com.squarecross.photoalbum.service;
 
+import com.squarecross.photoalbum.Constants;
 import com.squarecross.photoalbum.domain.Album;
 import com.squarecross.photoalbum.dto.AlbumDto;
 import com.squarecross.photoalbum.mapper.AlbumMapper;
@@ -9,7 +10,12 @@ import com.squarecross.photoalbum.repository.AlbumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
 import java.util.Optional;
+
+import com.squarecross.photoalbum.Constants;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @Service
 public class AlbumService {
@@ -19,6 +25,28 @@ public class AlbumService {
 
     @Autowired
     private PhotoRepository photoRepository;
+
+    public void deleteAlbumById(Long albumId) throws IOException {
+        this.albumRepository.deleteById(albumId);
+        this.deleteAlbumDirectories(albumId);
+    }
+
+    public AlbumDto createAlbum(AlbumDto albumDto) throws IOException {
+        Album album = AlbumMapper.convertToModel(albumDto);
+        this.albumRepository.save(album);
+        this.createAlbumDirectories(album);
+        return AlbumMapper.convertToDto(album);
+    }
+
+    private void deleteAlbumDirectories(Long albumId) throws IOException {
+        Files.delete(Paths.get(Constants.PATH_PREFIX + "/photos/original/" + albumId));
+        Files.delete(Paths.get(Constants.PATH_PREFIX + "/photos/thumb/" + albumId));
+    }
+
+    private void createAlbumDirectories(Album album) throws IOException {
+        Files.createDirectories(Paths.get(Constants.PATH_PREFIX + "/photos/original/" + album.getAlbumId()));
+        Files.createDirectories(Paths.get(Constants.PATH_PREFIX + "/photos/thumb/" + album.getAlbumId()));
+    }
 
     public AlbumDto getAlbum(Long albumId){
         // Optional은 자바 8에서 도입된 클래스이며, 값이 존재할 수도 있고 존재하지 않을 수도 있는 컨테이너 역할
