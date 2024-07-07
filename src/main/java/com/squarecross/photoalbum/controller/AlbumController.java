@@ -25,4 +25,11 @@ public class AlbumController {
         AlbumDto albumDto = albumService.getAlbum(albumId);
         return new ResponseEntity<>(albumDto, HttpStatus.OK);
     }
+
+    @RequestMapping(value="/json_body", method = RequestMethod.POST)
+    public ResponseEntity<AlbumDto> getAlbumByJson(@RequestBody final AlbumDto albumDto) {
+        AlbumDto albumDto1 = albumService.getAlbum(albumDto.getAlbumId());
+        return new ResponseEntity<>(albumDto1, HttpStatus.OK);
+    }
+
 }
